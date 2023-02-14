@@ -61,7 +61,7 @@ source "proxmox" "ubuntu-server-22-04-lts" {
 
   disks {
     type              = "scsi"
-    disk_size         = "32G"
+    disk_size         = "50G"
     storage_pool      = "local-lvm"
     storage_pool_type = "lvm"
     format            = "raw"
@@ -141,7 +141,10 @@ build {
   # run ansible playbook
   provisioner "ansible-local" {
     playbook_file   = "./playbooks/provision-k8s-node.yml"
-    extra_arguments = []
+    extra_arguments = [      
+       "-e", "ctrd_version=${var.ctrd_version}",
+       "-e", "kube_version=${var.kube_version}"
+    ]
   }
 
   # cleanups
